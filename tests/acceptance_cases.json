@@ -1,0 +1,42 @@
+[
+  [
+    "记录数",
+    "成绩记录总共有多少条？返回一列record_count。",
+    "SELECT COUNT(*) AS record_count FROM student_grades"
+  ],
+  [
+    "去重人数",
+    "学校一共有多少名学生？返回一列student_count，按学号去重。",
+    "SELECT COUNT(DISTINCT student_id) AS student_count FROM student_grades"
+  ],
+  [
+    "各科均分",
+    "各科平均分是多少？返回subject和avg_score两列，保留2位小数。",
+    "SELECT subject, ROUND(AVG(score),2) AS avg_score FROM student_grades GROUP BY subject"
+  ],
+  [
+    "班级最高均分",
+    "全校平均分最高的班级是哪个？基于所有成绩记录，保留并列，返回class_name和avg_score两列，均分显示2位小数。",
+    "WITH c AS (SELECT class_name,AVG(score) AS raw_avg FROM student_grades GROUP BY class_name) SELECT class_name,ROUND(raw_avg,2) AS avg_score FROM c WHERE raw_avg=(SELECT MAX(raw_avg) FROM c)"
+  ],
+  [
+    "学期过滤",
+    "2025-2026学年第一学期各科平均分是多少？返回subject和avg_score两列，保留2位小数。",
+    "SELECT subject,ROUND(AVG(score),2) AS avg_score FROM student_grades WHERE semester='2025-2026学年第一学期' GROUP BY subject"
+  ],
+  [
+    "及格率",
+    "各科成绩记录的及格率是多少？60分及格，百分数保留2位小数，返回subject和pass_rate两列。",
+    "SELECT subject, ROUND(100.0*SUM(CASE WHEN score>=60 THEN 1 ELSE 0 END)/COUNT(*),2) AS pass_rate FROM student_grades GROUP BY subject"
+  ],
+  [
+    "分数分布",
+    "按全部成绩记录，统计不及格（低于60）、及格（60至低于90）、优秀（90及以上）三个分数段的记录数，返回score_band和record_count两列，只输出有数据的分数段。",
+    "SELECT CASE WHEN score<60 THEN '不及格' WHEN score<90 THEN '及格' ELSE '优秀' END AS score_band, COUNT(*) AS record_count FROM student_grades GROUP BY score_band"
+  ],
+  [
+    "无数据",
+    "查询学号为__DEMO_MISSING_STUDENT__的学生成绩，返回student_id、subject、score三列。",
+    "SELECT student_id,subject,score FROM student_grades WHERE student_id='__DEMO_MISSING_STUDENT__'"
+  ]
+]

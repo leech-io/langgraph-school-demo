@@ -1,0 +1,1 @@
+"""Local school grades assistant."""
